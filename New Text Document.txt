@@ -1,0 +1,100 @@
+package javascriptExecutorPractice;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
+
+import utility.SeleniumUtility;
+
+public class JavaScriptExecutor1 extends SeleniumUtility {
+//	@Test
+	public void testCase1() throws InterruptedException {
+		WebDriver driver = setUp("chrome", "https://demo.actitime.com/login.do");
+
+//		type cast the WebDriver reference to JavascriptExecutor reference
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		js.executeScript("document.getElementById('username').value='admin';");
+		Thread.sleep(3000);
+
+		js.executeScript("document.getElementsByName('pwd')[0].value='manager';");
+
+		js.executeScript("document.getElementById('keepLoggedInCheckBox').checked=true;");
+		Thread.sleep(3000);
+
+//		js.executeScript("document.getElementById('loginButton').click();");
+		js.executeScript("arguments[0].click();", driver.findElement(By.id("loginButton")));
+		Thread.sleep(3000);
+
+//		to refresh the page
+//		js.executeScript("history.go(0)");
+		js.executeScript("location.reload()");
+
+//		to open the new window tab
+//		js.executeScript("window.open()");
+		js.executeScript("window.open('https://www.google.com/')");
+//		driver.switchTo().newWindow(WindowType.TAB);
+
+//		to navigate to a different page
+		js.executeScript("window.location='https://www.google.com/'");
+
+	}
+
+//	@Test
+	public void testCase2() {
+		WebDriver driver = setUp("chrome", "https://demo.automationtesting.in/Register.html");
+
+//		type cast the WebDriver reference to JavascriptExecutor reference
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		WebElement firstNameField = driver.findElement(By.cssSelector("input[placeholder='First Name']"));
+		js.executeScript("arguments[0].value='Smith';", firstNameField);
+
+		js.executeScript("arguments[0].value='Lee';",
+				driver.findElement(By.cssSelector("input[placeholder='Last Name']")));
+	}
+
+//	@Test
+	public void testCase3() {
+		WebDriver driver = setUp("chrome", "https://demo.actitime.com/login.do");
+
+//		type cast the WebDriver reference to JavascriptExecutor reference
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+//		how to get the page title
+		String pageTitle = js.executeScript("return document.title;").toString();
+		System.out.println("Login page title : " + pageTitle);
+
+//		how to get the page URL
+		System.out.println("Login page URL : " + js.executeScript("return document.URL;").toString());
+
+//		how to get the domain name
+		System.out.println("Domain : " + js.executeScript("return document.domain;").toString());
+
+		js.executeScript(
+				"document.getElementById('username').value='admin';document.getElementsByName('pwd')[0].value='manager';document.getElementById('loginButton').click()");
+	}
+
+	@Test
+	public void testCase4() throws InterruptedException {
+		WebDriver driver = setUp("chrome", "http://omayo.blogspot.com/2013/05/page-one.html");
+
+//		type cast the WebDriver reference to JavascriptExecutor reference
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+//		how to scroll using pixel or x & y coordinates
+		js.executeScript("window.scrollBy(0, 500)"); // vertical scrolling
+//		js.executeScript("window.scrollBy(200, 0)"); // horizontal scrolling
+		Thread.sleep(3000);
+
+//		how to scroll vertically till the end
+		js.executeScript("window.scrollBy(0, document.body.scrollHeight)");
+		Thread.sleep(3000);
+
+//		how to scroll till the specific element
+		js.executeScript("arguments[0].scrollIntoView(true)",
+				driver.findElement(By.xpath("//button[text()='Submit']")));
+	}
+}
